@@ -1,0 +1,32 @@
+h1 {
+    font-family: 'Russo One', sans-serif;
+    border: 2px #eee solid;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+body {
+    background-color: black;
+    font-family: 'Carrois Gothic SC', sans-serif;
+}
+
+form{
+    color: white;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.centered {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+#main-btn{
+    font-size: 2rem;
+}

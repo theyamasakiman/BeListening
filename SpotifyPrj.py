@@ -21,10 +21,11 @@ def hello_world():
         artist = form.artistname.data
         year = form.year.data,
         data = form.genre.data
-        #return redirect(url_for('login'))
+        # return redirect(url_for('login'))
     #return render_template('register.html', form=form)
         return '<p>successful</p>'
-    return '<p>Not Successful</p>'
+    else:
+        return '<p>Not Successful</p>'
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)
