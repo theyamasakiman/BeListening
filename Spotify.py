@@ -1,8 +1,8 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, url_for
 import urllib
-import json
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import requests
-from datetime import datetime
 from wtforms import Form, StringField, SelectField, validators, SubmitField, IntegerField
 
 
@@ -55,6 +55,22 @@ class SpotifyAccess(Form):
 form = None
 app = Flask(__name__)
 
+def send(message, email):
+    print(email)
+    message = Mail(
+        from_email=email,
+        to_emails=email,
+        subject="BeListening",
+        html_content=message)
+    try:
+        sg = SendGridAPIClient("SECURITY_KEY")
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e)
+
 @app.route('/', methods=('GET', 'POST'))
 def home():
     form = SpotifyAccess(request.form)
@@ -64,16 +80,14 @@ def home():
         genre = form.genre.data
         token, token_type = get_spotify_token()
         urls = search_spotify(token, token_type, artist, year, genre)
-        return f'<p>{urls}</p>'
+        if request.form["email"] != "":
+            send(urls, request.form["email"])
+            return render_template('/results.html')
+        else:
+            return f'<p>{urls}</p>'
     return render_template('_index.html',
                            title='Search Spotify Artists',
                            form=form)
-
-def pretty(obj):
-    return json.dumps(obj, sort_keys=True, indent=2)
-
-
-
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
